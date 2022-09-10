@@ -1,34 +1,18 @@
-import Directory from "./components/Directory";
-import "./global.scss";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login";
 const App = () => {
-  const categories = [
-    {
-      id: 1,
-      title: "Hats",
-      imageUrl: "https://i.ibb.co/cvpntL1/hats.png",
-    },
-    {
-      id: 2,
-      title: "Jackets",
-      imageUrl: "https://i.ibb.co/px2tCc3/jackets.png",
-    },
-    {
-      id: 3,
-      title: "Sneakers",
-      imageUrl: "https://i.ibb.co/0jqHpnp/sneakers.png",
-    },
-    {
-      id: 4,
-      title: "Womens",
-      imageUrl: "https://i.ibb.co/GCCdy8t/womens.png",
-    },
-    {
-      id: 5,
-      title: "Mens",
-      imageUrl: "https://i.ibb.co/R70vBrQ/men.png",
-    },
-  ];
-  return <Directory categories={categories} />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navbar />}>
+          <Route index element={<LandingPage />} />
+          <Route path="login" element={<Login />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;

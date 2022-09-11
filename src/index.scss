@@ -1,3 +1,19 @@
+:root {
+  --maxWidth: 1280px;
+  --lightGrey: #eee;
+  --medGrey: #353535;
+  --darkGrey: #1c1c1c;
+  --darkNavy: #020c1b;
+  --lightNavy: #112240;
+  --navy: #0a192f;
+  --green: #64ffda;
+  --blue: #57cbff;
+  --fontSuperBig: 2.5rem;
+  --fontBig: 1.5rem;
+  --fontMedium: 1.2rem;
+  --fontSmall: 1rem;
+  --fontSuperSmall: 12px;
+}
 * {
   box-sizing: border-box;
 }
@@ -13,6 +29,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
 a {
   color: black;
+}
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
 }

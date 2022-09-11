@@ -1,0 +1,30 @@
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  @mixin shrink-label {
+    transform: translate(5px, -20px);
+    opacity: 0.7;
+  }
+  .input-label {
+    opacity: 1;
+    transform: translate(0, -50px);
+    transition: 0.5s all ease-in-out;
+  }
+  .shrink-label {
+    @include shrink-label();
+  }
+  label {
+    font-size: var(--fontSuperSmall);
+  }
+  input {
+    height: 30px;
+    border-style: none;
+    border-bottom: 1px solid var(--darkGrey);
+    &:focus ~ label {
+      opacity: 1;
+      transform: translate(0, -50px);
+      transition: 0.5s all ease-in-out;
+    }
+  }
+}

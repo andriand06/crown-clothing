@@ -1,0 +1,23 @@
+button {
+  color: var(--lightGrey);
+  height: 40px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.sign-button {
+  width: 120px;
+  background-color: var(--darkNavy);
+  &:hover {
+    color: var(--darkNavy);
+    background-color: var(--lightGrey);
+  }
+}
+.sign-google-button {
+  width: 140px;
+  background-color: var(--lightNavy);
+  &:hover {
+    background-color: var(--lightGrey);
+    color: var(--lightNavy);
+  }
+}

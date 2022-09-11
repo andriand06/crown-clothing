@@ -7,6 +7,8 @@ import {
   signInWithPopup,
   signInWithRedirect,
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 // Your web app's Firebase configuration
@@ -22,38 +24,50 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 
 //set our google provider
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 /**
  * One Auth for firebase app
- * but can be more than one provider in firebase app
+ * but can be more than one googleProvider in firebase app
  * get authenthication from our firebase app
  */
 export const auth = getAuth(firebaseApp);
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGooglePopup = () =>
+  signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () =>
+  signInWithRedirect(auth, googleProvider);
 /**
  * Get our Firestore database
  */
 export const db = getFirestore();
+export const signUpWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
 
-export const createUserDocumentFromAuth = async (userAuth) => {
+  return await createUserWithEmailAndPassword(auth, email, password);
+};
+export const signInAuthWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+  return await signInWithEmailAndPassword(auth, email, password);
+};
+export const createUserDocumentFromAuth = async (
+  userAuth,
+  additionalInformation = {}
+) => {
   /**
    * If in our firestore there are no users document
    * firestore will create one for us
    * doc -> is method to get in to our document reference instance
    */
-  console.log(userAuth);
+  if (!userAuth) return;
   const userDocRef = doc(db, "users", userAuth.uid);
-  console.log(userDocRef);
   const userSnapshot = await getDoc(userDocRef);
   /**
    * If user data exists then return back userDocRef
    * If user data not exists then create the document in collection by using user auth data
    */
 
-  console.log(userSnapshot);
   if (!userSnapshot.exists()) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
@@ -62,6 +76,7 @@ export const createUserDocumentFromAuth = async (userAuth) => {
         displayName,
         email,
         createdAt,
+        ...additionalInformation,
       });
     } catch (error) {
       console.log(error.message);

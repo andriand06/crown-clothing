@@ -1,0 +1,22 @@
+.form-wrapper {
+  min-width: 400px;
+  min-height: 600px;
+  display: flex;
+  align-items: left;
+  flex-direction: column;
+  padding: 1.5rem;
+  h1 {
+    margin-bottom: 0.125rem;
+  }
+  .error-message {
+    margin-top: 1rem;
+    color: red;
+    transition: 0.5s all ease-in-out;
+  }
+  .button-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    gap: 1rem;
+  }
+}

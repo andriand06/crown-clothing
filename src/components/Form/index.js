@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
 
 import Input from "../Input";
@@ -14,9 +14,26 @@ const Form = ({ data }) => {
     });
     return newObj;
   };
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState({
+    signin: "",
+    signup: "",
+    email: "",
+    password: "",
+    signupEmail: "",
+    signupPassword: "",
+    confirmPassword: "",
+  });
   const [formFields, setFormFields] = useState(declareInitialFields);
-  console.log(formFields);
+  useEffect(() => {
+    console.log(errorMessage);
+  }, [errorMessage]);
+  const validateEmail = (email) => {
+    const regex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}/;
+    return regex.test(email);
+  };
+  const isMatch = (pass, pass2) => {
+    return pass.match(pass2) && pass.length === pass2.length;
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormFields({ ...formFields, [name]: value });
@@ -25,20 +42,76 @@ const Form = ({ data }) => {
     e.preventDefault();
     if (onSubmit.name === "signin") {
       try {
+        setErrorMessage((prevState) => {
+          return {
+            ...prevState,
+            submit: "",
+            email: "",
+            password: "",
+          };
+        });
+        const isEmailValid = validateEmail(formFields.email);
+        if (!isEmailValid) {
+          setErrorMessage({
+            ...errorMessage,
+            email: "Please input valid email",
+          });
+          return;
+        }
         const { user } = await onSubmit.func(
           formFields.email,
           formFields.password
         );
+        if (user) {
+          setErrorMessage({
+            ...errorMessage,
+            submit: "",
+            email: "",
+            password: "",
+          });
+        }
         console.log(user);
       } catch (error) {
-        console.log(error);
+        if (error.code === "auth/wrong-password") {
+          setErrorMessage((prevState) => {
+            return { ...prevState, password: "Incorrect password" };
+          });
+          return;
+        } else if (error.code === "auth/user-not-found") {
+          setErrorMessage((prevState) => {
+            return { ...prevState, submit: "User not found" };
+          });
+          return;
+        } else {
+          setErrorMessage((prevState) => {
+            return { ...prevState, submit: "Email not found" };
+          });
+        }
       }
     }
     if (onSubmit.name === "signup") {
-      if (formFields.signupPassword !== formFields.confirmPassword) {
-        setErrorMessage("Password do not match");
+      setErrorMessage((prevState) => {
+        return {
+          ...prevState,
+          submit: "",
+          signupEmail: "",
+          signupPassword: "",
+          confirmPassword: "",
+        };
+      });
+      if (!validateEmail(formFields.signupEmail)) {
+        setErrorMessage({
+          ...errorMessage,
+          signupEmail: "Please input valid email",
+        });
+      }
+      if (!isMatch(formFields.signupPassword, formFields.confirmPassword)) {
+        setErrorMessage((prevState) => {
+          return { ...prevState, confirmPassword: "Password do not match" };
+        });
         return;
       }
+
       try {
         const { user } = await onSubmit.func(
           formFields.signupEmail,
@@ -47,9 +120,25 @@ const Form = ({ data }) => {
         createUserDocumentFromAuth(user, {
           displayName: formFields.displayName,
         });
+        setErrorMessage({
+          ...errorMessage,
+          submit: "",
+          signupEmail: "",
+          signupPassword: "",
+          confirmPassword: "",
+        });
       } catch (error) {
         if (error.code === "auth/email-already-in-use") {
-          setErrorMessage("Email already in use");
+          setErrorMessage((prevState) => {
+            return { ...prevState, submit: "Email already in use" };
+          });
+        } else if (error.code === "auth/weak-password") {
+          setErrorMessage((prevState) => {
+            return {
+              ...prevState,
+              signupPassword: "Password should be at least 6 characters",
+            };
+          });
         }
         console.log(error);
       }
@@ -60,7 +149,9 @@ const Form = ({ data }) => {
       <form className="form-wrapper" onSubmit={handleSubmit}>
         <h1>{title}</h1>
         <label>{description}</label>
-        <span className="error-message">{errorMessage}</span>
+        <span className={`error-message ${errorMessage.submit && "show"}`}>
+          {errorMessage.submit}
+        </span>
         {inputs.map(({ name, label, type }, index) => (
           <Input
             key={index}
@@ -69,6 +160,7 @@ const Form = ({ data }) => {
             type={type}
             onChange={handleChange}
             value={formFields[name]}
+            errorMessage={errorMessage[name]}
           />
         ))}
         <div className="button-wrapper">

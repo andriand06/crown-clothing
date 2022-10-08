@@ -27,4 +27,29 @@
       transition: 0.5s all ease-in-out;
     }
   }
+  .error-span {
+    margin: 0;
+    position: relative;
+    top: -1rem;
+    font-size: var(--fontSuperSmall);
+    color: red;
+    transition: 0.5s all ease-in-out;
+    opacity: 0;
+    &.show {
+      opacity: 1;
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      25% {
+        transform: translateX(4px);
+      }
+      50% {
+        transform: translateX(-4px);
+      }
+      75% {
+        transform: translateX(4px);
+      }
+    }
+  }
 }

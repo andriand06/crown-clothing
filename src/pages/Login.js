@@ -25,7 +25,7 @@ const Login = () => {
     title: "I already have an account",
     description: "Sign up with your email and password",
     inputs: [
-      { name: "email", label: "Email", type: "email" },
+      { name: "email", label: "Email", type: "text" },
       { name: "password", label: "Password", type: "password" },
     ],
     buttons: [
@@ -53,7 +53,7 @@ const Login = () => {
     description: "Sign in with your email and password",
     inputs: [
       { name: "displayName", label: "Display Name", type: "text" },
-      { name: "signupEmail", label: "Email", type: "email" },
+      { name: "signupEmail", label: "Email", type: "text" },
       { name: "signupPassword", label: "Password", type: "password" },
       { name: "confirmPassword", label: "Confirm Password", type: "password" },
     ],

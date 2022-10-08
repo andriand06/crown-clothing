@@ -8,10 +8,21 @@
   h1 {
     margin-bottom: 0.125rem;
   }
+  label {
+    margin-bottom: 0.5rem;
+  }
   .error-message {
-    margin-top: 1rem;
+    margin: 1rem 0 0 0;
+    position: relative;
+    top: -1rem;
+    font-size: var(--fontSmall);
     color: red;
     transition: 0.5s all ease-in-out;
+    opacity: 0;
+    &.show {
+      opacity: 1;
+      animation: shake 0.5s;
+    }
   }
   .button-wrapper {
     display: flex;

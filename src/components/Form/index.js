@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
-
 import Input from "../Input";
 import Button from "../Button";
 import "./Form.styles.scss";
@@ -24,9 +23,7 @@ const Form = ({ data }) => {
     confirmPassword: "",
   });
   const [formFields, setFormFields] = useState(declareInitialFields);
-  useEffect(() => {
-    console.log(errorMessage);
-  }, [errorMessage]);
+  useEffect(() => {}, [errorMessage]);
   const validateEmail = (email) => {
     const regex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}/;
     return regex.test(email);
@@ -70,7 +67,6 @@ const Form = ({ data }) => {
             password: "",
           });
         }
-        console.log(user);
       } catch (error) {
         if (error.code === "auth/wrong-password") {
           setErrorMessage((prevState) => {
@@ -140,7 +136,6 @@ const Form = ({ data }) => {
             };
           });
         }
-        console.log(error);
       }
     }
   };

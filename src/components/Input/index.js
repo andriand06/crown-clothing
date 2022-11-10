@@ -9,6 +9,7 @@ const Input = ({ label, name, type, onChange, value, errorMessage }) => {
         onChange={onChange}
         value={value}
         required
+        autoComplete="new-password"
       />
       <label htmlFor={name} className={value ? "input-label" : "shrink-label"}>
         {label}

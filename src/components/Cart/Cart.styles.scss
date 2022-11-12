@@ -1,0 +1,19 @@
+.cart-wrapper {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  .cart-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .item-count {
+    position: absolute;
+    bottom: 10px;
+    font-size: var(--fontSmall);
+    font-weight: bold;
+  }
+}

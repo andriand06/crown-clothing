@@ -41,3 +41,9 @@ a {
   justify-content: center;
   flex-direction: row;
 }
+.product-cards-wrapper {
+  margin: 2.5rem 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}

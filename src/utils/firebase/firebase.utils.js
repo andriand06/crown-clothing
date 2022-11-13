@@ -12,7 +12,14 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+} from "firebase/firestore";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAQKnZKsB16mpl18OR3NANQsLjyo258BYU",
@@ -44,6 +51,25 @@ export const signInWithGoogleRedirect = () =>
  * Get our Firestore database
  */
 export const db = getFirestore();
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  //get collection reference from the collectionKey in our db
+  const collectionRef = collection(db, collectionKey);
+  //get batch object
+  const batch = writeBatch(db);
+
+  objectsToAdd.forEach((object) => {
+    //get document reference from object.title in our collection reference
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    //set object to our docRef
+    batch.set(docRef, object);
+  });
+  // fire batch
+  await batch.commit();
+  console.log("done");
+};
 export const signUpWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
 

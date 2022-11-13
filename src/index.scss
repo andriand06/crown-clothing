@@ -47,3 +47,30 @@ a {
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
 }
+
+.checkout-wrapper {
+  max-width: 750px;
+  margin: 60px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .column-name {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    font-size: 20px;
+    border-bottom: 2px solid var(--lightGrey);
+  }
+
+  .total {
+    width: 100%;
+    padding: 1rem;
+    font-size: var(--fontSuperBig);
+    font-weight: bold;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

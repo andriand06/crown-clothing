@@ -14,13 +14,24 @@
     height: 280px;
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    overflow-y: auto;
   }
   .checkout-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 60px;
     margin-top: auto;
     background-color: black;
-    color: white;
+    color: var(--lightGrey);
+    height: 40px;
+    text-decoration: none;
+    border: 1px solid black;
+    &:hover {
+      cursor: pointer;
+      color: black;
+      background-color: white;
+    }
   }
   &.hidden {
     display: none;

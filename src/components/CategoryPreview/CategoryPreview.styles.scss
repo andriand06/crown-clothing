@@ -1,0 +1,13 @@
+.category-preview-wrapper {
+  margin-bottom: 1rem;
+  .title {
+    font-size: var(--fontBig);
+    font-weight: bold;
+    text-decoration: none;
+  }
+  .product-cards-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+}

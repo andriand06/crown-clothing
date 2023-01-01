@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import { Link } from "react-router-dom";
 export const Nav = styled.div`
   display: flex;
   flex-direction: row;
@@ -9,7 +9,7 @@ export const Nav = styled.div`
   height: 70px;
 `;
 
-export const LogoWrapper = styled.a`
+export const LogoWrapper = styled(Link)`
   padding: 2rem 2rem 1rem 2rem;
 `;
 export const LinksWrapper = styled.div`

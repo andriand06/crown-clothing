@@ -18,7 +18,7 @@ const Navbar = () => {
   return (
     <>
       <Nav>
-        <LogoWrapper href="/">
+        <LogoWrapper to="/">
           <Logo />
         </LogoWrapper>
         <LinksWrapper>

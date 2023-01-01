@@ -1,17 +1,18 @@
 import "./CartItem.styles.scss";
-
+import { ItemDetailsWrapper, CartItemWrapper } from "./CartItem.styles";
 const CartItem = ({ cartItem }) => {
   const { imageUrl, name, qty, price } = cartItem;
   return (
-    <div className="cart-item">
+    <CartItemWrapper>
       <img src={imageUrl} alt={name} />
-      <div className="item-details">
+      <ItemDetailsWrapper>
+        {" "}
         <h2>{name}</h2>
         <span>
           {qty} x ${price}
         </span>
-      </div>
-    </div>
+      </ItemDetailsWrapper>
+    </CartItemWrapper>
   );
 };
 

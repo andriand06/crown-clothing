@@ -3,22 +3,19 @@ import {
   signUpWithEmailAndPassword,
   signInAuthWithEmailAndPassword,
 } from "../utils/firebase/firebase.utils";
+import { useEffect, useContext } from "react";
+import { UserContext } from "../contexts/user.context";
 import Form from "../components/Form";
+import { BUTTON_TYPE } from "../components/Button";
 const Login = () => {
-  // useEffect(() => {
-  //   async function logRedirectResult() {
-  //     //get redirect result from the authentication method (redirect method)
-  //     const response = await getRedirectResult(auth);
-  //     if (response) {
-  //       await createUserDocumentFromAuth(response.user);
-  //     }
-  //   }
-  //   logRedirectResult();
-  // }, []);
+  const { currentUser } = useContext(UserContext);
+  useEffect(() => {
+    if (currentUser) window.open("/", "_self");
+  }, [currentUser]);
   const logGoogleUser = async () => {
     await signInWithGooglePopup();
+    window.open("/", "_self");
   };
-
   const loginForm = {
     title: "I already have an account",
     description: "Sign up with your email and password",
@@ -32,6 +29,7 @@ const Login = () => {
         label: "Sign In",
         type: "submit",
         className: "sign-button",
+        buttonType: BUTTON_TYPE.sign,
       },
       {
         name: "googleSignin",
@@ -39,6 +37,7 @@ const Login = () => {
         type: "button",
         className: "sign-google-button",
         onClick: logGoogleUser,
+        buttonType: BUTTON_TYPE.google,
       },
     ],
     onSubmit: {
@@ -61,6 +60,7 @@ const Login = () => {
         label: "Sign Up",
         type: "submit",
         className: "sign-button",
+        buttonType: BUTTON_TYPE.sign,
       },
     ],
     onSubmit: {

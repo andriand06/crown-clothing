@@ -1,7 +1,8 @@
 import "./Input.styles.scss";
+import { InputWrapper, ErrorWrapper, InputLabel } from "./Input.styles";
 const Input = ({ label, name, type, onChange, value, errorMessage }) => {
   return (
-    <div className="input-wrapper">
+    <InputWrapper>
       <input
         id={name}
         name={name}
@@ -11,13 +12,13 @@ const Input = ({ label, name, type, onChange, value, errorMessage }) => {
         required
         autoComplete="new-password"
       />
-      <label htmlFor={name} className={value ? "input-label" : "shrink-label"}>
+      <InputLabel htmlFor={name} shrink={value.length}>
         {label}
-      </label>
-      <span className={`error-span ${errorMessage && "show"}`}>
+      </InputLabel>
+      <ErrorWrapper isError={errorMessage && errorMessage.length}>
         {errorMessage}
-      </span>
-    </div>
+      </ErrorWrapper>
+    </InputWrapper>
   );
 };
 export default Input;

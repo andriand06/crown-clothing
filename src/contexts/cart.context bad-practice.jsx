@@ -33,6 +33,15 @@ const removeCartItem = (cartItems, productToRemove) => {
 const clearItem = (cartItems, itemToRemove) => {
   return cartItems.filter((cartItem) => cartItem.id !== itemToRemove.id);
 };
+const calculateTotal = (cartItems) => {
+  return cartItems.reduce(
+    (total, cartItem) => total + cartItem.qty * cartItem.price,
+    0
+  );
+};
+const calculateCount = (cartItems) => {
+  return cartItems.reduce((count, cartItem) => count + cartItem.qty, 0);
+};
 export const CartContext = createContext({
   isCartOpen: false,
   setIsCartOpen: () => {},
@@ -43,9 +52,53 @@ export const CartContext = createContext({
   count: 0,
   total: 0,
 });
+
 const CART_ACTION_TYPES = {
-  SET_CART_ITEMS: "SET_CART_ITEMS",
-  TOGGLE_CART: "TOGGLE_CART",
+  TOGGLE_CART_OPEN: "TOGGLE_CART_OPEN",
+  ADD_ITEM_TO_CART: "ADD_ITEM_TO_CART",
+  REMOVE_ITEM_FROM_CART: "REMOVE_ITEM_FROM_CART",
+  REMOVE_ITEM: "REMOVE_ITEM",
+};
+//reducer can only keep readable value
+//best practice is to send the transformed payload to reducer instead of doing process / transform inside reducer
+const cartReducer = (state, action) => {
+  const { type, payload } = action;
+  console.log(action);
+  console.log(state);
+
+  switch (type) {
+    case CART_ACTION_TYPES.TOGGLE_CART_OPEN:
+      return {
+        ...state,
+        isCartOpen: true,
+      };
+    case CART_ACTION_TYPES.ADD_ITEM_TO_CART:
+      let addedCartItems = addCartItem(state.cartItems, payload);
+      return {
+        ...state,
+        cartItems: addedCartItems,
+        cartTotal: calculateTotal(addedCartItems),
+        cartCount: calculateCount(addedCartItems),
+      };
+    case CART_ACTION_TYPES.REMOVE_ITEM_FROM_CART:
+      let removedCartItems = removeCartItem(state.cartItems, payload);
+      return {
+        ...state,
+        cartItems: removedCartItems,
+        cartTotal: calculateTotal(removedCartItems),
+        cartCount: calculateCount(removedCartItems),
+      };
+    case CART_ACTION_TYPES.REMOVE_ITEM:
+      let newCartItems = clearItem(state.cartItems, payload);
+      return {
+        ...state,
+        cartItems: newCartItems,
+        cartTotal: calculateTotal(newCartItems),
+        cartCount: calculateCount(newCartItems),
+      };
+    default:
+      throw new Error(`Unhandled type of ${type} in cartReducer`);
+  }
 };
 const INITIAL_STATE = {
   isCartOpen: false,
@@ -53,69 +106,34 @@ const INITIAL_STATE = {
   cartTotal: 0,
   cartCount: 0,
 };
-
-const cartReducer = (state, action) => {
-  let { type, payload } = action;
-
-  switch (type) {
-    case CART_ACTION_TYPES.SET_CART_ITEMS:
-      return {
-        ...state,
-        ...payload,
-      };
-    case CART_ACTION_TYPES.TOGGLE_CART:
-      return {
-        ...state,
-        isCartOpen: payload,
-      };
-    default:
-      throw new Error(`Unhandled type of ${type} in cartReducer`);
-  }
-};
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);
   const { isCartOpen, cartItems, cartCount, cartTotal } = state;
-  const updateCartItemsReducer = (newCartItems) => {
-    const newCartCount = newCartItems.reduce(
-      (count, cartItem) => count + cartItem.qty,
-      0
-    );
-    const newCartTotal = newCartItems.reduce(
-      (total, cartItem) => total + cartItem.qty * cartItem.price,
-      0
-    );
-    const payload = {
-      cartItems: newCartItems,
-      cartTotal: newCartTotal,
-      cartCount: newCartCount,
-    };
-    dispatch({ type: "SET_CART_ITEMS", payload });
-    /**
-     * generate newCartTotal
-     * generate newCartCount
-     *
-     * dispatch new action with payload = {
-     *  newCartItems,
-     *  newCartTotal,
-     *  newCartCount
-     * }
-     */
+  const addItemToCart = (productToAdd) => {
+    dispatch({
+      type: CART_ACTION_TYPES.ADD_ITEM_TO_CART,
+      payload: productToAdd,
+    });
   };
   const setIsCartOpen = () => {
-    dispatch({ type: "TOGGLE_CART", payload: !isCartOpen });
-  };
-  const addItemToCart = (productToAdd) => {
-    const newCartItems = addCartItem(cartItems, productToAdd);
-    updateCartItemsReducer(newCartItems);
+    dispatch({
+      type: CART_ACTION_TYPES.TOGGLE_CART_OPEN,
+      payload: !isCartOpen,
+    });
   };
   const removeItemFromCart = (productToRemove) => {
-    const newCartItems = removeCartItem(cartItems, productToRemove);
-    updateCartItemsReducer(newCartItems);
+    dispatch({
+      type: CART_ACTION_TYPES.REMOVE_ITEM_FROM_CART,
+      payload: productToRemove,
+    });
   };
   const removeItem = (itemToRemove) => {
-    const newCartItems = clearItem(cartItems, itemToRemove);
-    updateCartItemsReducer(newCartItems);
+    dispatch({
+      type: CART_ACTION_TYPES.REMOVE_ITEM,
+      payload: itemToRemove,
+    });
   };
+
   const value = {
     isCartOpen,
     setIsCartOpen,

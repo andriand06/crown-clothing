@@ -3,12 +3,13 @@ import {
   signUpWithEmailAndPassword,
   signInAuthWithEmailAndPassword,
 } from "../utils/firebase/firebase.utils";
-import { useEffect, useContext } from "react";
-import { UserContext } from "../contexts/user.context";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../store/user/user.selector";
 import Form from "../components/Form";
 import { BUTTON_TYPE } from "../components/Button";
 const Login = () => {
-  const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector(selectCurrentUser);
   useEffect(() => {
     if (currentUser) window.open("/", "_self");
   }, [currentUser]);

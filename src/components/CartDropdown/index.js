@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import CartItem from "../CartItem";
-import { CartContext } from "../../contexts/cart.context";
+import { selectCartItems } from "../../store/cart/cart.selector";
 import { Wrapper, CartItems, EmptyMessage } from "./CartDropdown.styles";
 const CartDropdown = () => {
-  const { cartItems } = useContext(CartContext);
+  const cartItems = useSelector(selectCartItems);
   return (
     <Wrapper id="cart-dropdown">
       <CartItems>
